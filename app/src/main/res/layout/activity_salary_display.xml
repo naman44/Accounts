@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layout_salary_page"
+    android:background="@color/colorAllWhite">
+
+    <FrameLayout
+        android:id="@+id/frame_total_salary_page"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:elevation="5dp"
+        android:layout_height="70dp">
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="Total Salary : "
+            android:textSize="25sp"
+            android:textColor="#FFFFFF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/total_salary_page"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:text="10000"
+            android:textSize="25sp"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:id="@+id/refresh_salary_btn"
+            android:src="@drawable/ic_refresh"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="32dp"
+            android:layout_gravity="end"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/month_salary_page"
+        android:textSize="30sp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/pay_salary_btn"
+        android:layout_margin="16dp"
+        android:text="Pay"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/round_rectangle_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_salary_list"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/month_salary_page"
+        android:layout_marginTop="16dp" />
+
+</RelativeLayout>

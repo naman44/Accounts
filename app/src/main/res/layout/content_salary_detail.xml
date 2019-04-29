@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="80dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/detail_attendance"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
+        android:text="Present"
+        app:layout_constraintBottom_toTopOf="@+id/detail_attendance"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/detail_absent"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/detail_attendance"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="Absent"
+        app:layout_constraintBottom_toTopOf="@+id/detail_absent"
+        app:layout_constraintStart_toEndOf="@+id/detail_attendance" />
+
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="Rest Days"
+        app:layout_constraintBottom_toTopOf="@+id/detail_rest_days"
+        app:layout_constraintStart_toEndOf="@+id/detail_absent" />
+
+    <TextView
+        android:id="@+id/detail_rest_days"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/detail_absent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/detail_penalty"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/detail_rest_days"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/detail_advance"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/detail_penalty"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="Penalty"
+        app:layout_constraintBottom_toTopOf="@+id/detail_penalty"
+        app:layout_constraintStart_toEndOf="@+id/detail_rest_days" />
+
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="Advance"
+        app:layout_constraintBottom_toTopOf="@+id/detail_advance"
+        app:layout_constraintStart_toEndOf="@+id/detail_penalty" />
+
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
+        android:text="Salary"
+        app:layout_constraintBottom_toTopOf="@+id/detail_salary"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="To Pay"
+        app:layout_constraintBottom_toTopOf="@+id/detail_toPay"
+        app:layout_constraintStart_toEndOf="@+id/detail_salary" />
+
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="Difference"
+        app:layout_constraintBottom_toTopOf="@+id/detail_diff"
+        app:layout_constraintStart_toEndOf="@+id/detail_toPay" />
+
+    <TextView
+        android:id="@+id/detail_salary"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="35dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_attendance" />
+
+    <TextView
+        android:id="@+id/detail_toPay"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="35dp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/detail_salary"
+        app:layout_constraintTop_toBottomOf="@+id/detail_absent" />
+
+    <TextView
+        android:id="@+id/detail_diff"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="35dp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/detail_toPay"
+        app:layout_constraintTop_toBottomOf="@+id/detail_rest_days" />
+
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="Paid"
+        app:layout_constraintBottom_toTopOf="@+id/detail_diff"
+        app:layout_constraintStart_toEndOf="@+id/detail_diff" />
+
+    <TextView
+        android:id="@+id/detail_paid"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="35dp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/detail_diff"
+        app:layout_constraintTop_toBottomOf="@+id/detail_penalty" />
+
+    <TextView
+        android:id="@+id/detail_pay_date"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="35dp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/detail_paid"
+        app:layout_constraintTop_toBottomOf="@+id/detail_advance" />
+
+    <TextView
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="Pay Date"
+        app:layout_constraintBottom_toTopOf="@+id/detail_pay_date"
+        app:layout_constraintStart_toEndOf="@+id/detail_paid" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

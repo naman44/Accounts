@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Accounts</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="title_activity_add_employee">Add Employee</string>
+    <string name="text_working">WORKING</string>
+
+    <!-- Main page messages to show -->
+    <string name="msg_main_no_employee">No Employees in record</string>
+    <string name="msg_main_holiday">Holiday declared</string>
+    <string name="msg_main_sunday">Sunday</string>
+    <string name="msg_main_attendance">Attendances marked</string>
+
+    <string name="salary_placeholder">Pay : %1$.2f</string>
+    <string name="advance_placeholder">Advance : %1$.2f</string>
+    <string name="rest_placeholder">Rest : %1$d</string>
+    <string name="title_activity_salary_detail">SalaryDetailActivity</string>
+
+    <string name="warning_bottom_paid">This will mark salary as PAID!!! Procees with caution.</string>
+    <string name="title_activity_expense_creation">ExpenseCreationActivity</string>
+</resources>
