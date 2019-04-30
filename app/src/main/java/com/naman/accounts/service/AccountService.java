@@ -26,4 +26,8 @@ public class AccountService {
         else
             updateAccountBalance(j.getAccountName(), j.getAmount()*-1);
     }
+
+    public void updateAccountOnEdit(){
+
+    }
 }

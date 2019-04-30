@@ -65,6 +65,7 @@ public class BottomExpenseFragment extends BottomSheetDialogFragment{
             Intent intent = new Intent(getActivity(), ExpenseCreationActivity.class);
             intent.putExtra("id", id);
             startActivity(intent);
+            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
         });
 
         layoutDelete.setOnClickListener((View vi)->{

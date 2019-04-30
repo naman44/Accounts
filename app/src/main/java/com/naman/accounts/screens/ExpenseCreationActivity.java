@@ -32,10 +32,14 @@ import com.naman.accounts.adapter.DatabaseAdapter;
 import com.naman.accounts.adapter.SubJournalListAdapter;
 import com.naman.accounts.service.AccountService;
 import com.naman.accounts.service.AppUtil;
+import com.naman.accounts.service.TransactionService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ExpenseCreationActivity extends AppCompatActivity {
 
@@ -53,6 +57,8 @@ public class ExpenseCreationActivity extends AppCompatActivity {
     FloatingActionButton fab;
     SubJournalListAdapter adapter;
     boolean isNew;
+    Journal oldJournal;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,10 +140,33 @@ public class ExpenseCreationActivity extends AppCompatActivity {
         }
         else if(id != 0){
             isNew = false;
-            // TODO : fill layout with edit values
+            fillViewForEdit(id);
         }
         else
             dateTxt.setText(AppUtil.formatDate(LocalDate.now()));
+    }
+
+    private void fillViewForEdit(long id){
+        Thread t = new Thread(()->{
+            oldJournal = DatabaseAdapter.getInstance(this).journalDao().fetchTransactionById(id);
+        });
+        t.start();
+        try{
+            t.join();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(oldJournal != null){
+            accountNameTxt.setText(oldJournal.getAccountName());
+            remarkTxt.setText(oldJournal.getRemark());
+            amountTxt.setText(String.valueOf(oldJournal.getAmount()));
+            if(oldJournal.getType() == AppUtil.INT_CREDIT){
+                transactionType.setChecked(false);
+            }
+            else
+                transactionType.setChecked(true);
+            dateTxt.setText(oldJournal.getDate());
+        }
     }
 
     private void initializeRecyclerView(){
@@ -180,10 +209,13 @@ public class ExpenseCreationActivity extends AppCompatActivity {
                 DatabaseAdapter db = DatabaseAdapter.getInstance(this);
                 insertAccount(db);
                 long id = 0;
+                if(oldJournal != null)
+                    id = oldJournal.getId();
                 if(isNew){
                     id = db.journalDao().insertTransaction(transactionObj);
                 }
                 else{
+                    transactionObj.setId(id);
                     db.journalDao().updateTransaction(transactionObj);
                 }
                 if(id != 0){
@@ -235,13 +267,37 @@ public class ExpenseCreationActivity extends AppCompatActivity {
     }
 
     private void updateAccount(DatabaseAdapter db){
-        if(transactionObj.getType() == AppUtil.INT_DEBIT){
-            new AccountService(db)
-                    .updateAccountBalance(transactionObj.getAccountName(), transactionObj.getAmount());
+        if(isNew){
+            if(transactionObj.getType() == AppUtil.INT_DEBIT){
+                new AccountService(db)
+                        .updateAccountBalance(transactionObj.getAccountName(), transactionObj.getAmount());
+            }
+            else{
+                new AccountService(db)
+                        .updateAccountBalance(transactionObj.getAccountName(), transactionObj.getAmount()*-1);
+            }
         }
         else{
-            new AccountService(db)
-                    .updateAccountBalance(transactionObj.getAccountName(), transactionObj.getAmount()*-1);
+            if(transactionObj.getType() == AppUtil.INT_CREDIT && oldJournal.getType() == AppUtil.INT_CREDIT){
+                double amount = transactionObj.getAmount() - oldJournal.getAmount();
+                new AccountService(db)
+                        .updateAccountBalance(transactionObj.getAccountName(), amount*-1);
+            }
+            else if(transactionObj.getType() == AppUtil.INT_DEBIT && oldJournal.getType() == AppUtil.INT_DEBIT){
+                double amount = transactionObj.getAmount() - oldJournal.getAmount();
+                new AccountService(db)
+                        .updateAccountBalance(transactionObj.getAccountName(), amount);
+            }
+            else if(transactionObj.getType() == AppUtil.INT_CREDIT && oldJournal.getType() == AppUtil.INT_DEBIT){
+                double amount = transactionObj.getAmount() + oldJournal.getAmount();
+                new AccountService(db)
+                        .updateAccountBalance(transactionObj.getAccountName(), amount*-1);
+            }
+            else{
+                double amount = transactionObj.getAmount() + oldJournal.getAmount();
+                new AccountService(db)
+                        .updateAccountBalance(transactionObj.getAccountName(), amount);
+            }
         }
     }
 
