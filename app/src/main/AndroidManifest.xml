@@ -12,14 +12,14 @@
         <activity
             android:name=".screens.ExpenseCreationActivity"
             android:label="@string/title_activity_expense_creation"
-            android:parentActivityName=".ExpenseActivity"
+            android:parentActivityName=".screens.ExpenseActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.naman.accounts.ExpenseActivity" />
+                android:value="com.naman.accounts.screens.ExpenseActivity" />
         </activity>
         <activity
-            android:name=".ExpenseActivity"
+            android:name=".screens.ExpenseActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"

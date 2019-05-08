@@ -84,7 +84,7 @@ public class SalaryDisplayActivity extends AppCompatActivity {
             }catch (Exception e){
                 e.printStackTrace();
             }
-            adapter.submitList(list);
+            getDisplayList(monthValue);
         });
 
         paySalaryBtn.setOnClickListener((View v)->{

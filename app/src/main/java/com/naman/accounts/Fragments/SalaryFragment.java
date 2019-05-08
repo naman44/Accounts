@@ -33,6 +33,8 @@ import com.naman.accounts.service.RecyclerItemClickListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -100,8 +102,9 @@ public class SalaryFragment extends Fragment {
 
         attendanceBtn.setOnClickListener((View v)-> {
             if (aList == null || aList.size() == 0) {
-                new Thread(() ->
-                        new AttendanceService().generateAttendance(dateView.getText().toString(), getContext())).start();
+                Executors.newSingleThreadExecutor()
+                .execute(()->
+                    new AttendanceService().generateAttendance(dateView.getText().toString(), getContext()));
             }
             else{
                 displayToggle(-1);
@@ -118,7 +121,6 @@ public class SalaryFragment extends Fragment {
                 h.setDate(dateView.getText().toString());
                 h.setType("Anonymous");
                 h.setMonth(AppUtil.formatYearMonth(dateView.getText().toString(), "yyyy/MM"));
-
                 model.deleteAttendance(dateView.getText().toString());
                 new Thread(()-> DatabaseAdapter.getInstance(getContext()).holidayDao().insertHoliday(h)).start();
                 generateListForAttendance();

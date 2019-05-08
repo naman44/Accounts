@@ -1,4 +1,4 @@
-package com.naman.accounts;
+package com.naman.accounts.screens;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.naman.accounts.BottomFragments.BottomExpenseFragment;
 import com.naman.accounts.Model.Journal;
 import com.naman.accounts.Model.SubTransaction;
+import com.naman.accounts.R;
 import com.naman.accounts.adapter.DatabaseAdapter;
 import com.naman.accounts.adapter.ExpenseExpandableListAdapter;
 import com.naman.accounts.adapter.ExpenseListAdapter;
@@ -65,14 +66,11 @@ public class ExpenseActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.add_expense_fab);
         fab.setOnClickListener((View v)->{
             Intent intent = new Intent(this, ExpenseCreationActivity.class);
-            //currentDate = AppUtil.formatDate(LocalDate.ofEpochDay(cv.getDate()/86400000L));
             intent.putExtra("date", currentDate);
             startActivity(intent);
         });
 
-        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        expandableListView.setOnItemLongClickListener((AdapterView<?> parent, View view, int position, long id) ->{
                 BottomExpenseFragment frag = new BottomExpenseFragment();
                 Bundle b = new Bundle();
                 Journal j = adapter.getGroup(position);
@@ -81,7 +79,6 @@ public class ExpenseActivity extends AppCompatActivity {
                 frag.setArguments(b);
                 frag.show(getSupportFragmentManager(), frag.getTag());
                 return false;
-            }
         });
 
     }
@@ -89,7 +86,6 @@ public class ExpenseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //String date = AppUtil.formatDate(LocalDate.ofEpochDay(cv.getDate()/86400000L));
         fillRecycler();
     }
 

@@ -8,14 +8,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.naman.accounts.ExpenseActivity;
+import com.naman.accounts.screens.ExpenseActivity;
 import com.naman.accounts.Model.Journal;
 import com.naman.accounts.Model.SubTransaction;
 import com.naman.accounts.R;
 import com.naman.accounts.adapter.DatabaseAdapter;
 import com.naman.accounts.screens.ExpenseCreationActivity;
 import com.naman.accounts.service.AccountService;
-import com.naman.accounts.service.AppUtil;
 
 import java.util.List;
 

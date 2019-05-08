@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.naman.accounts.ExpenseActivity;
+import com.naman.accounts.screens.ExpenseActivity;
 import com.naman.accounts.Model.Accounts;
 import com.naman.accounts.R;
 import com.naman.accounts.adapter.AccountsListAdapter;
