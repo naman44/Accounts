@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
@@ -31,8 +32,9 @@ import com.naman.accounts.R;
 import com.naman.accounts.adapter.DatabaseAdapter;
 import com.naman.accounts.adapter.SubJournalListAdapter;
 import com.naman.accounts.service.AccountService;
+import com.naman.accounts.service.AppConstants;
 import com.naman.accounts.service.AppUtil;
-import com.naman.accounts.service.TransactionService;
+import com.naman.accounts.service.JournalService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -45,19 +47,20 @@ public class ExpenseCreationActivity extends AppCompatActivity {
 
     CheckBox detailsCheckBox;
     LinearLayout layoutDetails;
-    AutoCompleteTextView accountNameTxt;
+    AutoCompleteTextView accountNameTxt, remarkText;
     ToggleButton transactionType;
-    TextInputEditText amountTxt, remarkTxt, nameTxtSub, amountTxtSub;
+    TextInputEditText amountTxt, nameTxtSub, amountTxtSub;
     TextView dateTxt;
-    Journal transactionObj;
+    Journal fromTransactionObj;
+    Journal toTransactionObj;
     ImageButton addDetailLineBtn;
     List<SubTransaction> listSub;
     RecyclerView subRv;
     List<String> accountNamesList;
     FloatingActionButton fab;
     SubJournalListAdapter adapter;
-    boolean isNew;
-    Journal oldJournal;
+    Accounts toAccount;
+    DatabaseAdapter db;
 
 
     @Override
@@ -122,50 +125,19 @@ public class ExpenseCreationActivity extends AppCompatActivity {
         accountNameTxt = findViewById(R.id.expense_creation_account);
         transactionType = findViewById(R.id.expense_creation_toggle);
         amountTxt = findViewById(R.id.expense_creation_amount);
-        remarkTxt = findViewById(R.id.expense_creation_remark);
+        remarkText = findViewById(R.id.expense_creation_remark);
         nameTxtSub = findViewById(R.id.expense_creation_sub_name);
         amountTxtSub = findViewById(R.id.expense_creation_sub_amount);
         dateTxt = findViewById(R.id.expense_creation_date);
         addDetailLineBtn = findViewById(R.id.expense_add_line_btn);
         subRv = findViewById(R.id.expense_creation_sub_recycler);
         fab = findViewById(R.id.fab);
-        transactionObj = new Journal();
         listSub = new ArrayList<>(1);
+        dateTxt.setText(AppUtil.formatDate(LocalDate.now()));
+        db = DatabaseAdapter.getInstance(this);
 
-        isNew = true;
-        String date = getIntent().getStringExtra("date");
-        long id = getIntent().getLongExtra("id", 0);
-        if (date != null){
-            dateTxt.setText(date);
-        }
-        else if(id != 0){
-            isNew = false;
-            fillViewForEdit(id);
-        }
-        else
-            dateTxt.setText(AppUtil.formatDate(LocalDate.now()));
-    }
-
-    private void fillViewForEdit(long id){
-        Thread t = new Thread(()->{
-            oldJournal = DatabaseAdapter.getInstance(this).journalDao().fetchTransactionById(id);
-        });
-        t.start();
-        try{
-            t.join();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        if(oldJournal != null){
-            accountNameTxt.setText(oldJournal.getAccountName());
-            remarkTxt.setText(oldJournal.getRemark());
-            amountTxt.setText(String.valueOf(oldJournal.getAmount()));
-            if(oldJournal.getType() == AppUtil.INT_CREDIT){
-                transactionType.setChecked(false);
-            }
-            else
-                transactionType.setChecked(true);
-            dateTxt.setText(oldJournal.getDate());
+        if(getIntent().getStringExtra("date") != null){
+            dateTxt.setText(getIntent().getStringExtra("date"));
         }
     }
 
@@ -178,9 +150,8 @@ public class ExpenseCreationActivity extends AppCompatActivity {
     }
 
     private void initializeAutoComplete(){
-        Thread t = new Thread(()->{
-           accountNamesList = DatabaseAdapter.getInstance(this).accountDao().fetchAccountNames();
-        });
+        Thread t = new Thread(()->
+           accountNamesList = db.accountDao().fetchAccountNames());
         t.start();
         try{
             t.join();
@@ -189,7 +160,15 @@ public class ExpenseCreationActivity extends AppCompatActivity {
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, accountNamesList);
         accountNameTxt.setAdapter(adapter);
+        remarkText.setAdapter(adapter);
+        remarkText.setThreshold(2);
         accountNameTxt.setThreshold(2);
+
+        remarkText.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id)-> {
+            String selectedAccount = parent.getItemAtPosition(position).toString();
+            new Thread(()->
+                toAccount = db.accountDao().fetchAccountByName(selectedAccount)).start();
+        });
     }
 
     private void checkValues(){
@@ -204,32 +183,41 @@ public class ExpenseCreationActivity extends AppCompatActivity {
     }
 
     private void saveTransactionToDb(){
-            setTransactionObject();
-            Thread t = new Thread(()->{
-                DatabaseAdapter db = DatabaseAdapter.getInstance(this);
-                insertAccount(db);
-                long id = 0;
-                if(oldJournal != null)
-                    id = oldJournal.getId();
-                if(isNew){
-                    id = db.journalDao().insertTransaction(transactionObj);
+            new Thread(()->{
+                // insert account, if needed
+                if(!accountNamesList.contains(accountNameTxt.getText().toString())){
+                    db.accountDao()
+                            .insertAccount(new Accounts(accountNameTxt.getText().toString(),
+                                    AppConstants.AC_TYPE_EXPENSE));
                 }
-                else{
-                    transactionObj.setId(id);
-                    db.journalDao().updateTransaction(transactionObj);
+                JournalService service = new JournalService(db);
+                // first entry with sublist
+                if(amountTxt.getText() != null && !amountTxt.getText().toString().isEmpty()) {
+                    service.createJournal(accountNameTxt.getText().toString(),
+                            dateTxt.getText().toString(), transactionType.isChecked(), remarkText.getText().toString(),
+                            Double.parseDouble(amountTxt.getText().toString()), listSub);
+                    // second entry for double entry system, no sublist allowed
+                    if (toAccount != null) {
+                        service.createJournal(toAccount.getName(), dateTxt.getText().toString(),
+                                !transactionType.isChecked(), generateRemark(),
+                                Double.parseDouble(amountTxt.getText().toString()), null);
+                    }
                 }
-                if(id != 0){
-                    transactionObj.setId(id);
-                    insertSub(db);
-                    updateAccount(db);
-                }
-            });
-            t.start();
-            try{
-                t.join();
-            }catch (Exception e){
-                e.printStackTrace();
+            }).start();
+        }
+
+        private String generateRemark(){
+        String remark = "Transfer";
+            if(toAccount.getType() == AppConstants.AC_TYPE_SALARY){
+                remark = "Advance Paid";
             }
+            else if(toAccount.getType() == AppConstants.AC_TYPE_VENDOR){
+                if(transactionType.isChecked())
+                    remark = "Payment received";
+                else
+                    remark = "Payment Done";
+            }
+            return remark;
         }
 
     private void toggleViewEdit(int value){
@@ -244,70 +232,4 @@ public class ExpenseCreationActivity extends AppCompatActivity {
             transactionType.setEnabled(true);
         }
     }
-
-    private void setTransactionObject(){
-        if(accountNameTxt.getError() == null && amountTxt.getError() == null) {
-            transactionObj.setAccountName(accountNameTxt.getText().toString());
-            transactionObj.setDate(dateTxt.getText().toString());
-            transactionObj.setRemark(remarkTxt.getText().toString());
-            transactionObj.setAmount(Double.parseDouble(amountTxt.getText().toString()));
-            if (transactionType.isChecked()) {
-                transactionObj.setType(AppUtil.INT_DEBIT);
-            } else
-                transactionObj.setType(AppUtil.INT_CREDIT);
-
-        }
-    }
-
-    private void insertAccount(DatabaseAdapter db){
-        if(!accountNamesList.contains(accountNameTxt.getText().toString())){
-            db.accountDao()
-                    .insertAccount(new Accounts(accountNameTxt.getText().toString(), AppUtil.AC_TYPE_EXPENSE));
-        }
-    }
-
-    private void updateAccount(DatabaseAdapter db){
-        if(isNew){
-            if(transactionObj.getType() == AppUtil.INT_DEBIT){
-                new AccountService(db)
-                        .updateAccountBalance(transactionObj.getAccountName(), transactionObj.getAmount());
-            }
-            else{
-                new AccountService(db)
-                        .updateAccountBalance(transactionObj.getAccountName(), transactionObj.getAmount()*-1);
-            }
-        }
-        else{
-            if(transactionObj.getType() == AppUtil.INT_CREDIT && oldJournal.getType() == AppUtil.INT_CREDIT){
-                double amount = transactionObj.getAmount() - oldJournal.getAmount();
-                new AccountService(db)
-                        .updateAccountBalance(transactionObj.getAccountName(), amount*-1);
-            }
-            else if(transactionObj.getType() == AppUtil.INT_DEBIT && oldJournal.getType() == AppUtil.INT_DEBIT){
-                double amount = transactionObj.getAmount() - oldJournal.getAmount();
-                new AccountService(db)
-                        .updateAccountBalance(transactionObj.getAccountName(), amount);
-            }
-            else if(transactionObj.getType() == AppUtil.INT_CREDIT && oldJournal.getType() == AppUtil.INT_DEBIT){
-                double amount = transactionObj.getAmount() + oldJournal.getAmount();
-                new AccountService(db)
-                        .updateAccountBalance(transactionObj.getAccountName(), amount*-1);
-            }
-            else{
-                double amount = transactionObj.getAmount() + oldJournal.getAmount();
-                new AccountService(db)
-                        .updateAccountBalance(transactionObj.getAccountName(), amount);
-            }
-        }
-    }
-
-    private void insertSub(DatabaseAdapter db){
-        if(listSub != null && listSub.size() > 0){
-            for(SubTransaction tr : listSub){
-                tr.setJournalId(transactionObj.getId());
-                db.subJournalDao().insertSub(tr);
-            }
-        }
-    }
-
 }

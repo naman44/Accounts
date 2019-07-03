@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.naman.accounts.Model.Journal;
 import com.naman.accounts.R;
+import com.naman.accounts.service.AppConstants;
 import com.naman.accounts.service.AppUtil;
 
 import java.util.zip.Inflater;
@@ -21,12 +22,11 @@ public class ExpenseListAdapter extends ListAdapter<Journal, ExpenseListAdapter.
 
     class ExpenseListHolder extends RecyclerView.ViewHolder{
 
-        private TextView attName, attAdvance, timeIn, timeOut;
+        private TextView attName, timeIn, timeOut;
 
         ExpenseListHolder(View view){
             super(view);
             attName = itemView.findViewById(R.id.att_name);
-            attAdvance = itemView.findViewById(R.id.att_advance);
             timeIn = itemView.findViewById(R.id.time_in);
             timeOut = itemView.findViewById(R.id.time_out);
         }
@@ -34,13 +34,13 @@ public class ExpenseListAdapter extends ListAdapter<Journal, ExpenseListAdapter.
         void setObj(Journal t){
             attName.setText(t.getAccountName());
             timeIn.setText(t.getRemark());
-            if (t.getType() == AppUtil.INT_CREDIT){
-                attAdvance.setText(String.valueOf(t.getAmount()));
-                attAdvance.setTextColor(Color.RED);
+            if (t.getType() == AppConstants.INT_CREDIT){
+                timeIn.setText(String.valueOf(t.getAmount()));
+                timeIn.setTextColor(Color.RED);
             }
             else{
-                attAdvance.setText(String.valueOf(t.getAmount()));
-                attAdvance.setTextColor(Color.GREEN);
+                timeIn.setText(String.valueOf(t.getAmount()));
+                timeIn.setTextColor(Color.GREEN);
             }
         }
     }

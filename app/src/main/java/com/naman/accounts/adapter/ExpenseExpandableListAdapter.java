@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.naman.accounts.Model.Journal;
 import com.naman.accounts.Model.SubTransaction;
 import com.naman.accounts.R;
+import com.naman.accounts.service.AppConstants;
 import com.naman.accounts.service.AppUtil;
 
 import java.util.HashMap;
@@ -100,13 +101,13 @@ public class ExpenseExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         amount.setTypeface(null, Typeface.BOLD);
-        if(j.getType() == AppUtil.INT_CREDIT){
+        if(j.getType() == AppConstants.INT_CREDIT){
             amount.setText("-" + j.getAmount());
             amount.setTextColor(context.getColor(R.color.red));
         }
         else{
             amount.setText("+" + j.getAmount());
-            amount.setTextColor(context.getColor(R.color.colorPrimary));
+            amount.setTextColor(context.getColor(R.color.colorAccentGreen));
         }
         return convertView;
     }

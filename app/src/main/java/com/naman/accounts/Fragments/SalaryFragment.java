@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,7 +46,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class SalaryFragment extends Fragment {
 
-    private Button empBtn, salaryBtn, attendanceBtn, holidaysBtn;
+    private ImageButton empBtn, salaryBtn, holidaysBtn;
     private ImageView dotImage;
     private RecyclerView homeRv;
     private TextView dateView, msgMainPage;
@@ -76,7 +77,6 @@ public class SalaryFragment extends Fragment {
     private void initializeViews(){
         empBtn = mainView.findViewById(R.id.emp_btn_home);
         salaryBtn = mainView.findViewById(R.id.sal_btn_home);
-        attendanceBtn = mainView.findViewById(R.id.att_btn_home);
         dateView = mainView.findViewById(R.id.att_date);
         homeRv = mainView.findViewById(R.id.recycler_home);
         checkHoliday = mainView.findViewById(R.id.checkBox_holiday);
@@ -100,16 +100,16 @@ public class SalaryFragment extends Fragment {
     private void setListeners(){
         empBtn.setOnClickListener((View v)-> startActivity(new Intent(getActivity(), AddEmployee.class)));
 
-        attendanceBtn.setOnClickListener((View v)-> {
-            if (aList == null || aList.size() == 0) {
-                Executors.newSingleThreadExecutor()
-                .execute(()->
-                    new AttendanceService().generateAttendance(dateView.getText().toString(), getContext()));
-            }
-            else{
-                displayToggle(-1);
-            }
-        });
+//        attendanceBtn.setOnClickListener((View v)-> {
+//            if (aList == null || aList.size() == 0) {
+//                Executors.newSingleThreadExecutor()
+//                .execute(()->
+//                    new AttendanceService().generateAttendance(dateView.getText().toString(), getContext()));
+//            }
+//            else{
+//                displayToggle(-1);
+//            }
+//        });
 
         salaryBtn.setOnClickListener((View v)->{
             startActivity(new Intent(getActivity(), SalaryDisplayActivity.class));

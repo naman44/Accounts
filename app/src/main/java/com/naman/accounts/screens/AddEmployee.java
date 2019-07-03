@@ -142,15 +142,20 @@ public class AddEmployee extends AppCompatActivity implements ListViewHolder.Ite
     }
 
     @Override
-    public void onEditClicked(Employee obj) {
-        nameText.setText(obj.getEmpName());
-        salaryText.setText(String.valueOf(obj.getEmpSalary()));
-        doj.setText(obj.getDateOfJoin());
-        lastDay.setText(obj.getLastDate());
+    public void onEditClicked(Object obj) {
+        if(obj instanceof Employee){
+            nameText.setText(((Employee) obj).getEmpName());
+            salaryText.setText(String.valueOf(((Employee) obj).getEmpSalary()));
+            doj.setText(((Employee) obj).getDateOfJoin());
+            lastDay.setText(((Employee) obj).getLastDate());
+        }
     }
 
     @Override
-    public void onDeleteClicked(Employee obj) {
-        model.deleteEmployee(obj);
+    public void onDeleteClicked(Object obj) {
+        if(obj instanceof Employee){
+            model.deleteEmployee((Employee)obj);
+        }
+
     }
 }

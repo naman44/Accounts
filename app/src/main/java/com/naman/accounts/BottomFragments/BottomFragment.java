@@ -2,8 +2,10 @@ package com.naman.accounts.BottomFragments;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import com.naman.accounts.Model.AttendanceListViewModel;
 import com.naman.accounts.R;
 import com.naman.accounts.adapter.DatabaseAdapter;
 import com.naman.accounts.screens.SalaryDetailActivity;
+import com.naman.accounts.service.AppConstants;
 import com.naman.accounts.service.AppUtil;
 import com.naman.accounts.service.SalaryService;
 
@@ -31,7 +34,6 @@ import androidx.lifecycle.ViewModelProviders;
 public class BottomFragment extends BottomSheetDialogFragment {
 
     private TextView name, timeIn, timeOut;
-    private EditText advance;
     private ImageButton timeInBtn, timeOutBtn;
     private Button saveBtn;
     private Attendance att;
@@ -47,7 +49,6 @@ public class BottomFragment extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.layout_attendance_edit, container, false);
         name = v.findViewById(R.id.name_att_edit);
-        advance = v.findViewById(R.id.advance_att_edit);
         timeIn = v.findViewById(R.id.time_in_edit);
         timeOut = v.findViewById(R.id.time_out_edit);
         timeInBtn = v.findViewById(R.id.time_in_edit_btn);
@@ -74,7 +75,6 @@ public class BottomFragment extends BottomSheetDialogFragment {
 
     private void assignValuesToView(Attendance attendance){
         name.setText(attendance.getEmpName());
-        advance.setText(String.valueOf(attendance.getAdvance()));
         timeIn.setText(attendance.getTimeIn());
         timeOut.setText(attendance.getTimeOut());
         if(attendance.getPresent() == 0){
@@ -94,27 +94,30 @@ public class BottomFragment extends BottomSheetDialogFragment {
                 timeOut.setText("-");
             }
             else {
-                name.setTextColor(getResources().getColor(R.color.colorAllWhite, null));
+                TypedValue tv = new TypedValue();
+                Resources.Theme theme = getActivity().getTheme();
+                boolean suceess = theme.resolveAttribute(R.attr.navigationTextColor, tv, true);
+                int color = 0;
+                if(suceess)
+                    color = tv.data;
+                if(color == 0)
+                    name.setTextColor(getResources().getColor(R.color.colorAccent, theme));
+                else
+                    name.setTextColor(color);
                 attendance.setPresent(1);
-                timeIn.setText(AppUtil.startingTime);
-                timeOut.setText(AppUtil.endTime);
+                timeIn.setText(AppConstants.startingTime);
+                timeOut.setText(AppConstants.endTime);
             }
         });
 
         saveBtn.setOnClickListener((View v)->{
             //Save to DB
-            if(!advance.getText().toString().isEmpty())
-                attendance.setAdvance(Double.parseDouble(advance.getText().toString()));
             attendance.setTimeIn(timeIn.getText().toString());
             attendance.setTimeOut(timeOut.getText().toString());
 
             AttendanceListViewModel model = ViewModelProviders.of(this).get(AttendanceListViewModel.class);
             model.updateAttendance(attendance);
             getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-        });
-        advance.setOnFocusChangeListener((View v, boolean hasFocus)-> {
-                if(hasFocus)
-                    advance.setText("");
         });
     }
 

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAllWhite"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <TextView
@@ -13,9 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Date"
-        android:textColor="@color/colorAccent"
+        android:textColor="?colorAccent"
         android:textSize="18sp"
+        android:text="Date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dot_txt_main" />
 
@@ -55,36 +54,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
-    <Button
-        android:id="@+id/emp_btn_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="41dp"
-        android:text="Add Emp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/att_btn_home"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:text="Show List"
-        app:layout_constraintBaseline_toBaselineOf="@+id/sal_btn_home"
-        app:layout_constraintStart_toEndOf="@+id/emp_btn_home" />
-
-    <Button
-        android:id="@+id/sal_btn_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="41dp"
-        android:text="Salary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/att_btn_home" />
-
     <ImageView
         android:id="@+id/dot_txt_main"
         android:layout_width="wrap_content"
@@ -118,13 +87,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3" />
 
-    <Button
-        android:id="@+id/holidays_btn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="41dp"
-        android:text="Holidays"
+        android:layout_marginBottom="32dp"
+        android:weightSum="3"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sal_btn_home" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/emp_btn_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?selectableItemBackground"
+            app:srcCompat="@drawable/ic_employee_add" />
+
+        <ImageButton
+            android:id="@+id/sal_btn_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?selectableItemBackground"
+            app:srcCompat="@drawable/ic_pay_day" />
+
+        <ImageButton
+            android:id="@+id/holidays_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?selectableItemBackground"
+            app:srcCompat="@drawable/ic_task_list" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

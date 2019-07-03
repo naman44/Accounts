@@ -2,9 +2,12 @@ package com.naman.accounts.Model;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
 
 import com.naman.accounts.adapter.DatabaseAdapter;
+import com.naman.accounts.service.AppConstants;
+import com.naman.accounts.service.AppUtil;
 
 import java.util.List;
 
@@ -48,6 +51,10 @@ public class EmployeeListViewModel extends AndroidViewModel {
             long id = db.employeeDao().insertEmployee(employees[0]);
             if(id == -1){
                 db.employeeDao().updateEmployee(employees[0]);
+            }
+            else{
+                Accounts ac = new Accounts(employees[0].getEmpName(), AppConstants.AC_TYPE_SALARY);
+                db.accountDao().insertAccount(ac);
             }
             return null;
         }

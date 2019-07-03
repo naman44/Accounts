@@ -55,14 +55,6 @@ public class SalaryDetailActivity extends AppCompatActivity {
         detailRv = findViewById(R.id.recycler_salary_detail);
         coordinatorLayout = findViewById(R.id.salary_detail_layout);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener((View view)-> {
-                BottomSalaryFragment frag = new BottomSalaryFragment();
-                Bundle b = new Bundle();
-                b.putLong("id", salary.getId());
-                frag.setArguments(b);
-                frag.show(getSupportFragmentManager(), frag.getTag());
-        });
         if(getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }

@@ -56,20 +56,21 @@ class SalaryCreation {
                 timePenalty += calculatePenalty(Duration.between(timeIn, timeOut).toMillis());
             }
         }
-        getDifferenceInPay();
+        //getDifferenceInPay();
 
         //set object
         salaryGenerated.setTimePenalty(timePenalty);
         salaryGenerated.setAbsent(absent);
         salaryGenerated.setAttendance(present + overTime);
-        salaryGenerated.setAdvance(db.attendanceDao().fetchAdvanceAmount(salaryDisplay.getEmpName(), salaryGenerated.getMonth() + "/01"));
+        //salaryGenerated.setAdvance(db.attendanceDao().fetchAdvanceAmount(salaryDisplay.getEmpName(), salaryGenerated.getMonth() + "/01"));
+        salaryGenerated.setAdvance(db.accountDao().fetchAccountByName(salaryGenerated.getEmpName()).getClosingBalance());
 
         int adjustment = getMonthAdjustment(present, absent);
         double dailyWage = salaryDisplay.getSalary()/30;
         double hourlyWage = dailyWage/8;
 
         double salary = dailyWage*(salaryGenerated.getAttendance() + salaryGenerated.getRestDays() + adjustment)
-                - salaryGenerated.getAdvance() - (timePenalty*hourlyWage) + salaryGenerated.getDifference();
+                - (timePenalty*hourlyWage) - salaryGenerated.getAdvance();
 
         salaryGenerated.setSalaryToPay(salary);
     }
@@ -109,13 +110,13 @@ class SalaryCreation {
         return differential*0.5;
     }
 
-    private void getDifferenceInPay(){
-        double diff = 0;
-        String month = AppUtil.adjustMonth(salaryGenerated.getMonth(), "yyyy/MM", -1);
-        Salary salaryLast = db.salaryDao().fetchSalary(month, salaryGenerated.getEmpName());
-        if(salaryLast != null && salaryLast.getPayDate() != null && !salaryLast.getPayDate().isEmpty()){
-            diff = salaryLast.getSalaryToPay() - salaryLast.getAmountPaid();
-        }
-        salaryGenerated.setDifference(diff);
-    }
+//    private void getDifferenceInPay(){
+//        double diff = 0;
+//        String month = AppUtil.adjustMonth(salaryGenerated.getMonth(), "yyyy/MM", -1);
+//        Salary salaryLast = db.salaryDao().fetchSalary(month, salaryGenerated.getEmpName());
+//        if(salaryLast != null && salaryLast.getPayDate() != null && !salaryLast.getPayDate().isEmpty()){
+//            diff = salaryLast.getSalaryToPay() - salaryLast.getAmountPaid();
+//        }
+//        salaryGenerated.setDifference(diff);
+//    }
 }

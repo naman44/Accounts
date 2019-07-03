@@ -30,4 +30,7 @@ public interface AccountDao {
 
     @Query("select * from accounts")
     List<Accounts> fetchAllAccounts();
+
+    @Query("select name from accounts where type =:filter")
+    List<String> fetchSpecificAccounts(int filter);
 }

@@ -2,31 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/bottom_salary_title"
-        android:layout_width="191dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="108dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="Salary Edit"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/bottom_salary_amount"
         android:layout_width="87dp"
         android:layout_height="25dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical"
         android:text="Paid Amount"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bottom_salary_title" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_bottom_salary" />
 
     <TextView
         android:id="@+id/bottom_salary_date"
@@ -54,34 +43,43 @@
         android:layout_width="95dp"
         android:layout_height="29dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:background="@null"
         android:ems="10"
         android:inputType="numberDecimal"
         app:layout_constraintStart_toEndOf="@+id/bottom_salary_amount"
-        app:layout_constraintTop_toBottomOf="@+id/bottom_salary_title" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_bottom_salary" />
 
     <Button
         android:id="@+id/btn_update_bottom_salary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="161dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:text="Update"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bottom_salary_edit_date" />
 
-    <TextView
-        android:id="@+id/bottom_salary_warning"
+    <Spinner
+        android:id="@+id/spinner_bottom_salary"
         android:layout_width="wrap_content"
-        android:textColor="@android:color/holo_red_dark"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:text="@string/warning_bottom_paid"
+        android:background="@drawable/round_rectangle_background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bottom_salary_date" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/account_name_bottom_salary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="180dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,8 @@ package com.naman.accounts.service;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 
+import com.naman.accounts.Model.Journal;
+
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,21 +14,13 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class AppUtil {
 
-    private static String dateFormat = "yyyy/MM/dd";
-    private static String dateFormatEasy = "dd MMM";
-    private static String timeFormat="HH:mm";
-    public static String startingTime = "09:00";
-    public static String endTime = "17:30";
-    public static int INT_CREDIT = 0;
-    public static int INT_DEBIT = 1;
-    public static int AC_TYPE_EXPENSE = 2;
-
     public static String formatDate(LocalDate date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(AppConstants.dateFormat);
         return formatter.format(date);
     }
 
@@ -34,17 +28,17 @@ public class AppUtil {
         if(date == null || date.isEmpty()){
             return "";
         }
-        LocalDate d = LocalDate.parse(date, DateTimeFormatter.ofPattern(dateFormat));
-        return DateTimeFormatter.ofPattern(dateFormatEasy).format(d);
+        LocalDate d = LocalDate.parse(date, DateTimeFormatter.ofPattern(AppConstants.dateFormat));
+        return DateTimeFormatter.ofPattern(AppConstants.dateFormatEasy).format(d);
     }
 
     public static String formatDate(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat(dateFormat, getLocale());
+        SimpleDateFormat df = new SimpleDateFormat(AppConstants.dateFormat, getLocale());
         return df.format(date);
     }
 
     public static LocalDate formatLocalDateFromString(String date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(AppConstants.dateFormat);
         return LocalDate.parse(date, formatter);
     }
 
@@ -61,7 +55,7 @@ public class AppUtil {
 
     public static Date formatDateFromString(String date) {
         try{
-            SimpleDateFormat df = new SimpleDateFormat(dateFormat, getLocale());
+            SimpleDateFormat df = new SimpleDateFormat(AppConstants.dateFormat, getLocale());
             return df.parse(date);
         }catch (ParseException pe){
             pe.printStackTrace();
@@ -70,12 +64,12 @@ public class AppUtil {
     }
 
     public static LocalTime formatLocalTimeFromString(String time){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(timeFormat, getLocale());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(AppConstants.timeFormat, getLocale());
         return LocalTime.parse(time, formatter);
     }
 
     public static Date formatTimeFromString(String time) throws ParseException{
-        SimpleDateFormat df = new SimpleDateFormat(timeFormat, getLocale());
+        SimpleDateFormat df = new SimpleDateFormat(AppConstants.timeFormat, getLocale());
         return df.parse(time);
     }
 
@@ -128,6 +122,35 @@ public class AppUtil {
         return y.format(DateTimeFormatter.ofPattern(pattern));
     }
 
+    public static int getJournalType(String value){
+        int type = -1;
+        if(value.equalsIgnoreCase("SALE")){
+            type = AppConstants.JOURNAL_TYPE_SALE;
+        }
+        else if(value.equalsIgnoreCase("PURCHASE")){
+            type = AppConstants.JOURNAL_TYPE_PURCHASE;
+        }
+        return type;
+    }
 
+    public static int getFinancialYear(String date){
+        LocalDate inputDate = formatLocalDateFromString(date);
+        LocalDate fyDate = LocalDate.of(inputDate.getYear(), 4, 1);
+        if(inputDate.isBefore(fyDate))
+            return inputDate.getYear() - 1;
+        else
+            return inputDate.getYear();
+    }
+
+    public static double getValue(List<Journal> journalList){
+        double total = 0;
+        for(Journal j : journalList){
+            if(j.getType() == AppConstants.INT_CREDIT)
+                total += j.getAmount()*-1;
+            else
+                total += j.getAmount();
+        }
+        return total;
+    }
 
 }

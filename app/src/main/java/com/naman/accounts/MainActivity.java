@@ -1,5 +1,6 @@
 package com.naman.accounts;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -10,8 +11,16 @@ import android.view.View;
 import com.google.android.material.navigation.NavigationView;
 import com.naman.accounts.Fragments.BaseFragment;
 import com.naman.accounts.Fragments.ExpensesFragment;
+import com.naman.accounts.Fragments.InventoryFragment;
+import com.naman.accounts.Fragments.ManufacturingFragment;
 import com.naman.accounts.Fragments.SalaryFragment;
+import com.naman.accounts.adapter.DatabaseAdapter;
+import com.naman.accounts.screens.ExpenseActivity;
+import com.naman.accounts.screens.ExpenseCreationActivity;
+import com.naman.accounts.service.AccountBalanceService;
+import com.naman.accounts.service.AppUtil;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -23,11 +32,16 @@ import androidx.fragment.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+
+import java.time.LocalDate;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FloatingActionButton fab;
+    ImageButton nightModeButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +50,11 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         fab =  findViewById(R.id.fab);
+
         fab.setOnClickListener((View view) ->{
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//            Intent intent = new Intent(this, ExpenseCreationActivity.class);
+//            intent.putExtra("date", AppUtil.formatDate(LocalDate.now()));
+                startActivity(new Intent(this, ExpenseActivity.class));
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -49,8 +65,23 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(true);
-        onNavigationItemSelected(navigationView.getMenu().getItem(0));
+
+        navigationView.setCheckedItem(R.id.nav_home);
+        onNavigationItemSelected(navigationView.getCheckedItem());
+
+        nightModeButton = navigationView.getHeaderView(0).findViewById(R.id.night_mode_switch);
+        nightModeButton.setOnClickListener((View v)->{
+            if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+            else
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            recreate();
+        });
+
+        new Thread(()->{
+            new AccountBalanceService(DatabaseAdapter.getInstance(this)).initAccountBalances();
+        }).start();
     }
 
     @Override
@@ -85,16 +116,17 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
         Fragment fragment = null;
         Class fragmentClass;
+        fab.hide();
 
         switch (item.getItemId()){
             case R.id.nav_home :
                 fragmentClass = BaseFragment.class;
+                fab.show();
                 break;
             case R.id.nav_salary :
                 fragmentClass = SalaryFragment.class;
@@ -102,8 +134,15 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_expenses :
                 fragmentClass = ExpensesFragment.class;
                 break;
+            case R.id.nav_inventory :
+                fragmentClass = InventoryFragment.class;
+                break;
+            case R.id.nav_manufacture :
+                fragmentClass = ManufacturingFragment.class;
+                break;
             default:
                 fragmentClass = BaseFragment.class;
+                fab.show();
                 break;
         }
         try {
@@ -112,10 +151,8 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        fab.hide();
-
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.main_frame, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.main_frame, fragment, item.getTitle().toString()).commit();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

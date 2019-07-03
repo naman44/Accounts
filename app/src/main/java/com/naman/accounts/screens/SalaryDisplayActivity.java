@@ -9,10 +9,13 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.naman.accounts.BottomFragments.BottomSalaryFragment;
 import com.naman.accounts.Model.Salary;
 import com.naman.accounts.R;
 import com.naman.accounts.adapter.DatabaseAdapter;
 import com.naman.accounts.adapter.SalaryListAdapter;
+import com.naman.accounts.adapter.SalaryListHolder;
 import com.naman.accounts.service.AppUtil;
 import com.naman.accounts.service.OnSwipeTouchListener;
 import com.naman.accounts.service.RecyclerItemClickListener;
@@ -26,17 +29,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SalaryDisplayActivity extends AppCompatActivity {
+public class SalaryDisplayActivity extends AppCompatActivity implements SalaryListHolder.mySalaryTouchListener {
 
     TextView monthName, totalSalary;
     RelativeLayout layoutPage;
     RecyclerView salaryRv;
     SalaryListAdapter adapter;
     List<Salary> list;
-    String monthValue;
+    public String monthValue;
     DatabaseAdapter db;
     ImageButton refreshBtn;
-    Button paySalaryBtn;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -52,7 +54,6 @@ public class SalaryDisplayActivity extends AppCompatActivity {
         totalSalary = findViewById(R.id.total_salary_page);
         salaryRv = findViewById(R.id.recycler_salary_list);
         refreshBtn = findViewById(R.id.refresh_salary_btn);
-        paySalaryBtn = findViewById(R.id.pay_salary_btn);
 
         salaryRv.setOnTouchListener(new OnSwipeTouchListener(this){
             @Override
@@ -87,20 +88,8 @@ public class SalaryDisplayActivity extends AppCompatActivity {
             getDisplayList(monthValue);
         });
 
-        paySalaryBtn.setOnClickListener((View v)->{
-            Thread t = new Thread(()->{
-               new SalaryService(DatabaseAdapter.getInstance(this)).updateBatchPayment(list);
-            });
-            t.start();
-            try{
-                t.join();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            getDisplayList(monthValue);
-        });
-
         initiateRecycler();
+        bottomDialog();
     }
     private void initiateRecycler(){
         LinearLayoutManager layoutRv = new LinearLayoutManager(this);
@@ -109,13 +98,12 @@ public class SalaryDisplayActivity extends AppCompatActivity {
         adapter = new SalaryListAdapter(this);
         salaryRv.setAdapter(adapter);
 
-        salaryRv.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                (View view, int position)->{
-            //TODO : open salaryDetail page with id
-                    Intent intent = new Intent(this, SalaryDetailActivity.class);
-                    intent.putExtra("id", list.get(position).getId());
-                    startActivity(intent);
-        }));
+//        salaryRv.addOnItemTouchListener(new RecyclerItemClickListener(this,
+//                (View view, int position)->{
+//                    Intent intent = new Intent(this, SalaryDetailActivity.class);
+//                    intent.putExtra("id", list.get(position).getId());
+//                    startActivity(intent);
+//        }));
     }
 
     @Override
@@ -124,7 +112,7 @@ public class SalaryDisplayActivity extends AppCompatActivity {
         getDisplayList("");
     }
 
-    private void getDisplayList(String month){
+    public void getDisplayList(String month){
         db = DatabaseAdapter.getInstance(this);
         Thread t = new Thread(()->{
             if(month.isEmpty()){
@@ -136,11 +124,6 @@ public class SalaryDisplayActivity extends AppCompatActivity {
         try{
             t.join();
             adapter.submitList(list);
-            if(list.isEmpty()){
-                paySalaryBtn.setVisibility(View.GONE);
-            }
-            else
-                paySalaryBtn.setVisibility(View.VISIBLE);
             YearMonth y = YearMonth.parse(monthValue, DateTimeFormatter.ofPattern("yyyy/MM"));
             monthName.setText(y.format(DateTimeFormatter.ofPattern("MMM yy")));
         }catch (Exception e){
@@ -156,5 +139,29 @@ public class SalaryDisplayActivity extends AppCompatActivity {
                 total += sd.getSalaryToPay();
         }
         totalSalary.setText(AppUtil.getAmountWithSymbol(this, total));
+    }
+
+    @Override
+    public void onPayClicked(long id) {
+        BottomSalaryFragment frag = new BottomSalaryFragment();
+        Bundle b = new Bundle();
+        b.putLong("id", id);
+        frag.setArguments(b);
+        frag.show(getSupportFragmentManager(), frag.getTag());
+    }
+
+    @Override
+    public void onDetailClicked(long id) {
+        Intent intent = new Intent(this, SalaryDetailActivity.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
+    }
+
+    private void bottomDialog(){
+        View bottomSheet = findViewById(R.id.salary_bottom_sheet);
+        BottomSheetBehavior mBottomSheetBehavior;
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        mBottomSheetBehavior.setPeekHeight(0);
     }
 }

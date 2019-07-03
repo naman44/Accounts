@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorAllWhite">#FFFFFF</color>
 
     <color name="red">#FA8072</color>
-    <color name="green">#D5F5E3</color>
+    <color name="green">#66BB6A</color>
+    <color name="pink">#D81B60</color>
+
+    <color name="dividerColor">#F2F2F3</color>
+    <color name="primaryTextLight">#33343B</color>
+    <color name="secondaryTextLight">#8033343B</color>
+    <color name="backgroundCardLight">#FFFF</color>
+
+    <color name="primaryTextDark">#F4F4F6</color>
+    <color name="secondaryTextDark">#96F4F4F6</color>
+    <color name="backgroundCardDark">#28292e</color>
+
+    <color name="blue">#0091EA</color>
+    <color name="orange">#ff9800</color>
+
+    <color name="colorAccentGreen">#008577</color>
+
 </resources>

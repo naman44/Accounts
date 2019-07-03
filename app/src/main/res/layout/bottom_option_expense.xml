@@ -16,6 +16,7 @@
         android:paddingBottom="8dp"
         android:clickable="true"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:background="?selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

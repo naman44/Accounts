@@ -3,53 +3,52 @@
     package="com.naman.accounts">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".screens.SalaryCalculatorScreen"></activity>
+        <activity android:name=".screens.ExpenseListScreen" />
+        <activity android:name=".screens.TradeListScreen" />
+        <activity android:name=".screens.MappingScreen" />
+        <activity android:name=".screens.SalePurchaseScreen" />
+        <activity android:name=".screens.InventoryScreen" />
+        <activity android:name=".screens.AddItemActivity" />
         <activity
             android:name=".screens.ExpenseCreationActivity"
             android:label="@string/title_activity_expense_creation"
-            android:parentActivityName=".screens.ExpenseActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".screens.ExpenseActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.naman.accounts.screens.ExpenseActivity" />
         </activity>
-        <activity
-            android:name=".screens.ExpenseActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".screens.ExpenseActivity" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".screens.HolidayActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".screens.HolidayActivity" />
         <activity
             android:name=".screens.SalaryDetailActivity"
-            android:parentActivityName=".screens.SalaryDisplayActivity"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
+            android:parentActivityName=".screens.SalaryDisplayActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".screens.SalaryDisplayActivity" />
         </activity>
         <activity
             android:name=".screens.SalaryDisplayActivity"
-            android:label="Salary Page"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Salary Page" />
         <activity
             android:name=".screens.AddEmployee"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

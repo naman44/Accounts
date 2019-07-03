@@ -19,8 +19,34 @@
     <string name="salary_placeholder">Pay : %1$.2f</string>
     <string name="advance_placeholder">Advance : %1$.2f</string>
     <string name="rest_placeholder">Rest : %1$d</string>
+    <string name="arrow_placeholder">%1s -> %2s</string>
+
     <string name="title_activity_salary_detail">SalaryDetailActivity</string>
 
-    <string name="warning_bottom_paid">This will mark salary as PAID!!! Procees with caution.</string>
+    <string name="warning_bottom_paid">This will mark salary as PAID!!! Proceed with caution.</string>
     <string name="title_activity_expense_creation">ExpenseCreationActivity</string>
+    <string name="trade_list_title">Trade List</string>
+    <string name="closing_balance">Closing balance</string>
+    <string name="opening_balance">Opening Balance</string>
+    <string name="salary_calculator">Salary Calculator</string>
+
+
+    <array name="item_type">
+        <item>Bottle</item>
+        <item>Caps</item>
+        <item>Daana</item>
+        <item>MasterBatch</item>
+        <item>WAD</item>
+    </array>
+    <array name="item_plastic">
+        <item>HDPE</item>
+        <item>PET</item>
+        <item>CP</item>
+        <item>PP</item>
+    </array>
+    <array name="payment_type">
+        <item>Cash</item>
+        <item>Bank</item>
+        <item>Cheque</item>
+    </array>
 </resources>

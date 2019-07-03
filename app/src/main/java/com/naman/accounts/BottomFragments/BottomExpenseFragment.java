@@ -23,7 +23,7 @@ import androidx.annotation.Nullable;
 
 public class BottomExpenseFragment extends BottomSheetDialogFragment{
 
-    LinearLayout layoutEdit, layoutDelete;
+    LinearLayout layoutDelete;
     List<SubTransaction> list;
     long id;
 
@@ -37,7 +37,6 @@ public class BottomExpenseFragment extends BottomSheetDialogFragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.bottom_option_expense, container, false);
-        layoutEdit = v.findViewById(R.id.linear_edit_expense_bottom);
         layoutDelete = v.findViewById(R.id.linear_delete_expense_bottom);
 
         if(getArguments() != null){
@@ -54,27 +53,11 @@ public class BottomExpenseFragment extends BottomSheetDialogFragment{
                 }
             }
         }
-        if(list != null && !list.isEmpty()){
-            layoutEdit.setVisibility(View.GONE);
-        }
-        else
-            layoutEdit.setVisibility(View.VISIBLE);
-
-        layoutEdit.setOnClickListener((View vi)->{
-            Intent intent = new Intent(getActivity(), ExpenseCreationActivity.class);
-            intent.putExtra("id", id);
-            startActivity(intent);
-            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-        });
-
         layoutDelete.setOnClickListener((View vi)->{
             new Thread(()->{
                 DatabaseAdapter db = DatabaseAdapter.getInstance(getActivity());
                 Journal j = db.journalDao().fetchTransactionById(id);
-                int x = db.journalDao().deleteTransaction(id);
-                if(x > 0){
-                    new AccountService(db).updateAccount(j);
-                }
+                new AccountService(db).deleteJournalEntry(j);
             }).start();
             getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
         });

@@ -41,8 +41,8 @@ public class AttendanceService {
                 if (a.getDate() == null || a.getDate().isEmpty()) {
                     a.setPresent(1);
                     a.setDate(date);
-                    a.setTimeOut(AppUtil.endTime);
-                    a.setTimeIn(AppUtil.startingTime);
+                    a.setTimeOut(AppConstants.endTime);
+                    a.setTimeIn(AppConstants.startingTime);
                     DatabaseAdapter.getInstance(context).attendanceDao().insertAttendance(a);
                 }
             }

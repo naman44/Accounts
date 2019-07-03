@@ -3,8 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="?android:attr/selectableItemBackground"
-    android:clickable="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
@@ -15,7 +13,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:elevation="12dp"
-        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardBackgroundColor="?colorAccent"
         app:cardCornerRadius="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,14 +23,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="#FFFFFF"
+            android:textColor="?attr/colorPrimary"
             android:textSize="25sp" />
 
     </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/salary_list_name"
-        android:layout_width="156dp"
+        android:layout_width="125dp"
         android:layout_height="31dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -44,7 +42,7 @@
 
     <TextView
         android:id="@+id/salary_list_advance"
-        android:layout_width="156dp"
+        android:layout_width="125dp"
         android:layout_height="31dp"
         android:layout_marginStart="8dp"
         android:gravity="center_vertical"
@@ -54,7 +52,7 @@
 
     <TextView
         android:id="@+id/salary_list_rest"
-        android:layout_width="116dp"
+        android:layout_width="wrap_content"
         android:layout_height="31dp"
         android:gravity="center_vertical"
         android:text="TextView"
@@ -63,7 +61,7 @@
 
     <TextView
         android:id="@+id/salary_list_amount"
-        android:layout_width="116dp"
+        android:layout_width="wrap_content"
         android:layout_height="31dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
@@ -71,23 +69,24 @@
         app:layout_constraintStart_toEndOf="@+id/salary_list_name"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView"
+    <ImageButton
+        android:id="@+id/salary_list_detail_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:background="?selectableItemBackgroundBorderless"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_chevron_right_24dp" />
 
-    <TextView
-        android:id="@+id/salary_list_paid"
+    <Button
+        android:id="@+id/salary_list_pay_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:text="PAID"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        android:layout_marginTop="16dp"
+        android:background="?selectableItemBackground"
+        android:text="Pay"
+        app:layout_constraintEnd_toStartOf="@+id/salary_list_detail_btn"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

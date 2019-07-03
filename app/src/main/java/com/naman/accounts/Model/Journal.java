@@ -23,9 +23,18 @@ public class Journal {
     private String remark;
     @NonNull
     private String date;
-    private long association;
     @Ignore
     private int subValues;
+
+    private String tags;
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
 
     public long getId() {
         return id;
@@ -77,14 +86,6 @@ public class Journal {
         this.date = date;
     }
 
-    public long getAssociation() {
-        return association;
-    }
-
-    public void setAssociation(long association) {
-        this.association = association;
-    }
-
     public int getSubValues() {
         return subValues;
     }
@@ -92,4 +93,5 @@ public class Journal {
     public void setSubValues(int subValues) {
         this.subValues = subValues;
     }
+
 }

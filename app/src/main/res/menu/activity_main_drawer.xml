@@ -21,9 +21,9 @@
             android:icon="@drawable/ic_contract"
             android:title="Inventory" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_manufacture"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="Manufacture" />
     </group>
 
     <item android:title="Reporting">

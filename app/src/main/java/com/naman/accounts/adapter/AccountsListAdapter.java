@@ -18,19 +18,18 @@ public class AccountsListAdapter extends ListAdapter<Accounts, AccountsListAdapt
 
     class AccountListHolder extends RecyclerView.ViewHolder{
 
-        private TextView attName, attAdvance, timeIn, timeOut;
+        private TextView attName, timeIn, timeOut;
 
         AccountListHolder(View view){
             super(view);
             attName = itemView.findViewById(R.id.att_name);
-            attAdvance = itemView.findViewById(R.id.att_advance);
             timeIn = itemView.findViewById(R.id.time_in);
             timeOut = itemView.findViewById(R.id.time_out);
         }
 
         void setObj(Accounts t){
             attName.setText(t.getName());
-            attAdvance.setText(String.valueOf(t.getClosingBalance()));
+            timeOut.setText(String.valueOf(t.getClosingBalance()));
         }
     }
 

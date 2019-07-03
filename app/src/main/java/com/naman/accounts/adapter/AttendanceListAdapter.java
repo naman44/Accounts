@@ -10,12 +10,16 @@ import com.naman.accounts.Model.Attendance;
 import com.naman.accounts.R;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalTime;
+
 public class AttendanceListAdapter extends ListAdapter<Attendance, AttendanceListAdapter.AttendanceListHolder> {
 
+    private int green;
     class AttendanceListHolder extends RecyclerView.ViewHolder {
 
         private TextView attName, attAdvance, timeIn, timeOut;
@@ -23,21 +27,29 @@ public class AttendanceListAdapter extends ListAdapter<Attendance, AttendanceLis
         AttendanceListHolder(View itemView) {
             super(itemView);
             attName = itemView.findViewById(R.id.att_name);
-            attAdvance = itemView.findViewById(R.id.att_advance);
             timeIn = itemView.findViewById(R.id.time_in);
             timeOut = itemView.findViewById(R.id.time_out);
         }
 
         void setObj(Attendance a){
             attName.setText(a.getEmpName());
-            attAdvance.setText(a.getAdvance() + "");
+            if(a.getPresent() == 1){
+                LocalTime ti = LocalTime.parse(a.getTimeIn());
+                LocalTime to = LocalTime.parse(a.getTimeOut());
+                if(ti.isAfter(LocalTime.of(9, 15)))
+                    timeIn.setTextColor(Color.RED);
+                if(to.isBefore(LocalTime.of(17, 15)))
+                    timeOut.setTextColor(Color.RED);
+                if(to.isAfter(LocalTime.of(17,30)))
+                    timeOut.setTextColor(green);
+                if(ti.isBefore(LocalTime.of(9, 00)))
+                    timeIn.setTextColor(green);
+            }
             timeIn.setText(a.getTimeIn());
             timeOut.setText(a.getTimeOut());
             if(a.getPresent() == 0){
                 attName.setTextColor(Color.RED);
             }
-            else
-                attName.setTextColor(Color.BLACK);
         }
     }
 
@@ -73,6 +85,7 @@ public class AttendanceListAdapter extends ListAdapter<Attendance, AttendanceLis
     @Override
     public AttendanceListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_attendance_list, parent, false);
+        green = parent.getContext().getResources().getColor(R.color.colorAccentGreen);
         return new AttendanceListHolder(v);
     }
 }
